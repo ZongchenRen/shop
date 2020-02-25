@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <classPathEntry location="/Users/renzongchen/desktop/mysql-connector-java-8.0.13.jar"/>
+
+    <context id="DB2Tables" targetRuntime="MyBatis3">
+        <!--        不追加xml    -->
+        <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin"/>
+        <commentGenerator>
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+        <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
+                        connectionURL="jdbc:mysql://127.0.0.1:3306/moocmall?characterEncoding=utf-8"
+                        userId="root"
+                        password="rootroot">
+        </jdbcConnection>
+
+        <!--
+                   true：使用BigDecimal对应DECIMAL和 NUMERIC数据类型
+                   false：默认,
+                       scale>0;length>18：使用BigDecimal;
+                       scale=0;length[10,18]：使用Long；
+                       scale=0;length[5,9]：使用Integer；
+                       scale=0;length<5：使用Short；
+                -->
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+
+        <javaModelGenerator targetPackage="cn.gogosoft.mall.pojo"
+                            targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+            <!-- 设置是否在getter方法中，对String类型字段调用trim()方法 -->
+            <!--       使用lombok注解 这里不需要     -->
+            <!--            <property name="trimStrings" value="true"/>-->
+        </javaModelGenerator>
+
+        <sqlMapGenerator targetPackage="mappers" targetProject="src/main/resources">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+
+        <javaClientGenerator type="XMLMAPPER" targetPackage="cn.gogosoft.mall.dao"
+                             targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+        <!--        <table tableName="mall_order" domainObjectName="Order" enableCountByExample="false"-->
+        <!--               enableDeleteByExample="false" enableSelectByExample="false"-->
+        <!--               enableUpdateByExample="false"/>-->
+        <!--        <table tableName="mall_order_item" domainObjectName="OrderItem" enableCountByExample="false"-->
+        <!--               enableDeleteByExample="false" enableSelectByExample="false"-->
+        <!--               enableUpdateByExample="false"/>-->
+        <table tableName="mall_user" domainObjectName="User" enableCountByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false"
+               enableUpdateByExample="false"/>
+
+    </context>
+</generatorConfiguration>
