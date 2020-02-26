@@ -7,6 +7,7 @@ package cn.gogosoft.mall.exception;
  */
 
 import static cn.gogosoft.mall.enums.ResponseEnum.ERROR;
+import static cn.gogosoft.mall.enums.ResponseEnum.NEED_LOGIN;
 
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -22,5 +23,11 @@ public class RuntimeExceptionHandler {
 	// @ResponseStatus(value = HttpStatus.ACCEPTED) 返回状态码，跟返回数据没关系
 	public ResponseVo handle(RuntimeException e) {
 		return ResponseVo.error(ERROR, e.getMessage());
+	}
+
+	@ExceptionHandler(UserLoginExcption.class)
+	@ResponseBody
+	public ResponseVo userLoginHandle() {
+		return ResponseVo.error(NEED_LOGIN);
 	}
 }

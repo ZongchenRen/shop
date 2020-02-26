@@ -1,6 +1,5 @@
 package cn.gogosoft.mall.controller;
 
-import static cn.gogosoft.mall.enums.ResponseEnum.NEED_LOGIN;
 import static cn.gogosoft.mall.enums.ResponseEnum.PARAM_ERROR;
 
 import java.util.Objects;
@@ -10,6 +9,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -66,9 +66,10 @@ public class UserController {
 	@GetMapping("/user")
 	public ResponseVo<User> userInfo(HttpSession session) {
 		User user = ((User) session.getAttribute(MallConst.CURRENT_USER));
-		if (user == null) {
-			return ResponseVo.error(NEED_LOGIN);
-		}
+		// 拦截器统一处理 {@link UserLoginInterceptor}
+		// if (user == null) {
+		// return ResponseVo.error(NEED_LOGIN);
+		// }
 		return ResponseVo.success(user);
 	}
 
@@ -78,12 +79,8 @@ public class UserController {
 	 * {@link TomcatServletWebServerFactory}
 	 */
 	public ResponseVo<User> userLogOut(HttpSession session) {
-		User user = ((User) session.getAttribute(MallConst.CURRENT_USER));
-		if (user == null) {
-			return ResponseVo.error(NEED_LOGIN);
-		}
 		session.removeAttribute(MallConst.CURRENT_USER);
-		return ResponseVo.success(user);
+		return ResponseVo.success();
 	}
 
 }

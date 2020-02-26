@@ -1,0 +1,3 @@
+- 单元测试时class添加 `@Transactional`注解
+- 打包 -> `mvn clean package `
+- 打包跳过单元测试部分 ->  `mvn clean package -Dmaven.test.skip=true`
