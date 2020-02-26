@@ -1,3 +1,5 @@
 - 单元测试时class添加 `@Transactional`注解
 - 打包 -> `mvn clean package `
 - 打包跳过单元测试部分 ->  `mvn clean package -Dmaven.test.skip=true`
+- 耗时：http请求 > 磁盘IO > 内存，所以`redis`很快
+- 单元测试一定要写
