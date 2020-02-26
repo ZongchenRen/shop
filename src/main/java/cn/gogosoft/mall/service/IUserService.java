@@ -1,6 +1,7 @@
 package cn.gogosoft.mall.service;
 
 import cn.gogosoft.mall.pojo.User;
+import cn.gogosoft.mall.vo.ResponseVo;
 
 /**
  * @author renzongchen
@@ -11,9 +12,10 @@ public interface IUserService {
 	/**
 	 * 用户注册
 	 */
-	void regist(User user);
+	ResponseVo<User> regist(User user);
 
 	/**
 	 * 用户登录
 	 */
+	ResponseVo<User> login(String username, String passwor);
 }
