@@ -1,6 +1,8 @@
 package cn.gogosoft.mall.service.impl;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -28,5 +30,12 @@ public class CategoryServiceImplTest extends MallApplicationTests {
 	public void selectAll() {
 		ResponseVo<List<CategoryVo>> listResponseVo = categoryService.selectAll();
 		Assert.assertEquals(ResponseEnum.SUCCESS.getCode(), listResponseVo.getStatus());
+	}
+
+	@Test
+	public void findSubCategoryId() {
+		Set<Integer> set = new HashSet<Integer>();
+		categoryService.findSubCategoryId(100001, set);
+		log.error("目录={}" + set);
 	}
 }

@@ -1,5 +1,11 @@
-- 单元测试时class添加 `@Transactional`注解
+
+- `ResponseVo` 请求响应VO统一处理
+- `ResponseEnum` 响应状态码统一处理
+- 单元测试时class添加 `@Transactional`注解，数据制作测试，不修改数据库
 - 打包 -> `mvn clean package `
 - 打包跳过单元测试部分 ->  `mvn clean package -Dmaven.test.skip=true`
 - 耗时：http请求 > 磁盘IO > 内存，所以`redis`很快
 - 单元测试一定要写
+- `@JsonInclude(value = Include.NON_NULL)`   当返回数据为空的时候不进行序列化
+- `@Param` 用在dao，与xml中的参数映射
+- `@RequsetParam` 用在controller,表示传参

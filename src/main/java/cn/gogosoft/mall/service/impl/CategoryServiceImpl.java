@@ -3,6 +3,7 @@ package cn.gogosoft.mall.service.impl;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
@@ -49,9 +50,26 @@ public class CategoryServiceImpl implements ICategoryService {
 		return ResponseVo.success(categoryVoList);
 	}
 
+	@Override
+	public void findSubCategoryId(Integer id, Set<Integer> resultSet) {
+		List<Category> categories = categoryMapper.selectAll();
+		findSubCategoryId(id, resultSet, categories);
+	}
+
+	// 递归
+	private void findSubCategoryId(Integer id, Set<Integer> resultSet, List<Category> categories) {
+		for (Category category : categories) {
+			if (id.equals(category.getParentId())) {
+				resultSet.add(category.getId());
+				findSubCategoryId(category.getId(), resultSet, categories);
+			}
+
+		}
+	}
+
 	/**
 	 * 查询子目录
-	 * 
+	 *
 	 * @param categoryVoList
 	 *           上级目录
 	 * @param categories

@@ -13,7 +13,7 @@ import lombok.Data;
 /**
  * @author renzongchen
  * @data 2020-02-24 11:33
- * @description
+ * @description 接口返回统一处理
  */
 @Data
 @JsonInclude(value = Include.NON_NULL)
