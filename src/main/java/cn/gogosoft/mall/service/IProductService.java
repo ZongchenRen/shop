@@ -2,6 +2,7 @@ package cn.gogosoft.mall.service;
 
 import com.github.pagehelper.PageInfo;
 
+import cn.gogosoft.mall.vo.ProductDetailVo;
 import cn.gogosoft.mall.vo.ResponseVo;
 
 /**
@@ -12,4 +13,5 @@ import cn.gogosoft.mall.vo.ResponseVo;
 public interface IProductService {
 	ResponseVo<PageInfo> list(Integer categoryId, Integer pageNum, Integer pageSize);
 
+	ResponseVo<ProductDetailVo> detail(Integer productId);
 }

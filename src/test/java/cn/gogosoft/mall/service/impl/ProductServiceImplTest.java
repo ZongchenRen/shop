@@ -9,6 +9,7 @@ import com.github.pagehelper.PageInfo;
 
 import cn.gogosoft.mall.MallApplicationTests;
 import cn.gogosoft.mall.enums.ResponseEnum;
+import cn.gogosoft.mall.vo.ProductDetailVo;
 import cn.gogosoft.mall.vo.ResponseVo;
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,8 +26,15 @@ public class ProductServiceImplTest extends MallApplicationTests {
 
 	@Test
 	public void list() {
-		ResponseVo<PageInfo> list = productService.list(null, 2, 3);
-		Assert.assertEquals(ResponseEnum.SUCCESS.getCode(), list.getStatus());
+		ResponseVo<PageInfo> responseVo = productService.list(null, 2, 3);
+		Assert.assertEquals(ResponseEnum.SUCCESS.getCode(), responseVo.getStatus());
+
+	}
+
+	@Test
+	public void detail() {
+		ResponseVo<ProductDetailVo> responseVo = productService.detail(26);
+		Assert.assertEquals(ResponseEnum.SUCCESS.getCode(), responseVo.getStatus());
 
 	}
 }
