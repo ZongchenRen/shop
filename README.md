@@ -2,7 +2,7 @@
 - `@NotNull` 不能为空
 - `@NotEmpty` 用于集合
 - `@NotBlank(message = "用户名不能为空")` 用于String 判断空格
-- `@Valid` 表单验证
+- `@Valid` 表单验证  必备注解 ,统一处理后，方法参数不需要`BindingResult`
 - `ResponseVo` 请求响应VO统一处理
 - `ResponseEnum` 响应状态码统一处理
 - 单元测试时class添加 `@Transactional`注解，数据只做测试，不修改数据库

@@ -1,16 +1,11 @@
 package cn.gogosoft.mall.controller;
 
-import static cn.gogosoft.mall.enums.ResponseEnum.PARAM_ERROR;
-
-import java.util.Objects;
-
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,14 +31,7 @@ public class UserController {
 	private UserServiceImpl userService;
 
 	@PostMapping("/user/register")
-	public ResponseVo<User> register(@Valid @RequestBody UserRegisterForm userForm,
-			BindingResult bindingResult) {
-		if (bindingResult.hasErrors()) {
-			log.error("注册提交的参数有误,{} {}",
-					Objects.requireNonNull(bindingResult.getFieldError()).getField(),
-					bindingResult.getFieldError().getDefaultMessage());
-			return ResponseVo.error(PARAM_ERROR, bindingResult);
-		}
+	public ResponseVo<User> register(@Valid @RequestBody UserRegisterForm userForm) {
 		User user = new User();
 		BeanUtils.copyProperties(userForm, user);
 		return userService.regist(user);
@@ -51,10 +39,7 @@ public class UserController {
 
 	@PostMapping("/user/login")
 	public ResponseVo<User> login(@Valid @RequestBody UserLoginForm userLoginForm,
-			BindingResult bindingResult, HttpSession session) {
-		if (bindingResult.hasErrors()) {
-			return ResponseVo.error(PARAM_ERROR, bindingResult);
-		}
+			HttpSession session) {
 		ResponseVo responseVo = userService.login(userLoginForm.getUsername(),
 				userLoginForm.getPassword());
 		// 设置session
@@ -67,9 +52,6 @@ public class UserController {
 	public ResponseVo<User> userInfo(HttpSession session) {
 		User user = ((User) session.getAttribute(MallConst.CURRENT_USER));
 		// 拦截器统一处理 {@link UserLoginInterceptor}
-		// if (user == null) {
-		// return ResponseVo.error(NEED_LOGIN);
-		// }
 		return ResponseVo.success(user);
 	}
 
