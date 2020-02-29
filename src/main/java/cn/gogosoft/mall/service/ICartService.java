@@ -13,9 +13,17 @@ public interface ICartService {
 	/**
 	 * 添加购物车
 	 * 
-	 * @param uid
 	 * @param cartAddForm
 	 * @return
 	 */
 	ResponseVo<CartVo> add(Integer uid, CartAddForm cartAddForm);
+
+	/**
+	 *
+	 * list
+	 * 
+	 * @param uid
+	 * @return
+	 */
+	ResponseVo<CartVo> list(Integer uid);
 }

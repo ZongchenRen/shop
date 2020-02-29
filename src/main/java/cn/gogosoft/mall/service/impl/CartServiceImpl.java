@@ -2,6 +2,12 @@ package cn.gogosoft.mall.service.impl;
 
 import static cn.gogosoft.mall.enums.ResponseEnum.*;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -16,6 +22,7 @@ import cn.gogosoft.mall.form.CartAddForm;
 import cn.gogosoft.mall.pojo.Cart;
 import cn.gogosoft.mall.pojo.Product;
 import cn.gogosoft.mall.service.ICartService;
+import cn.gogosoft.mall.vo.CartProductVo;
 import cn.gogosoft.mall.vo.CartVo;
 import cn.gogosoft.mall.vo.ResponseVo;
 
@@ -69,6 +76,50 @@ public class CartServiceImpl implements ICartService {
 		opsForHash.put(String.format(CART_REDIS_KEY_TEMPLATE, uid), String.valueOf(product.getId()),
 				gson.toJson(cart));
 
-		return ResponseVo.success();
+		return list(uid);
+	}
+
+	@Override
+	public ResponseVo<CartVo> list(Integer uid) {
+		HashOperations<String, String, String> opsForHash = redisTemplate.opsForHash();
+		String redisKey = String.format(CART_REDIS_KEY_TEMPLATE, uid);
+		Map<String, String> entries = opsForHash.entries(redisKey);
+		boolean selectAll = true;
+		Integer cartTotalQuantity = 0;
+		BigDecimal cartTotalPrice = BigDecimal.ZERO;
+		CartVo cartVo = new CartVo();
+		List<CartProductVo> cartProductVoList = new ArrayList<>();
+		for (Entry<String, String> entry : entries.entrySet()) {
+			Integer productId = Integer.valueOf(entry.getKey());
+			Cart cart = gson.fromJson(entry.getValue(), Cart.class);
+			// TODO 需要优化，使用Mysql的函数in , 不要在for循环中查询
+			Product product = productMapper.selectByPrimaryKey(productId);
+			if (product != null) {
+				CartProductVo cartProductVo = new CartProductVo(product.getId(), cart.getQuantity(),
+						product.getName(), product.getSubtitle(), product.getMainImage(),
+						product.getPrice(), product.getStatus(),
+						product.getPrice().multiply(BigDecimal.valueOf(cart.getQuantity())),
+						product.getStock(), cart.getProductSelected());
+				cartProductVoList.add(cartProductVo);
+				if (!cartProductVo.getProductSelected()) {
+					selectAll = false;
+				}
+				// 计算总价（只计算选中的）
+				if (cart.getProductSelected()) {
+					cartTotalPrice = cartTotalPrice.add(cartProductVo.getProductTotalPrice());
+				}
+
+			}
+			// 计算总数量
+			cartTotalQuantity += cart.getQuantity();
+		}
+		cartVo.setCartProductVo(cartProductVoList);
+		// 有一个没有选中就不叫全选
+		cartVo.setSelectAll(false);
+		// 总数量
+		cartVo.setCartTotalQuantity(cartTotalQuantity);
+		// 总价
+		cartVo.setCartTotalPrice(cartTotalPrice);
+		return ResponseVo.success(cartVo);
 	}
 }
