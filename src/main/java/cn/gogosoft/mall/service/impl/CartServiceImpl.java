@@ -3,8 +3,10 @@ package cn.gogosoft.mall.service.impl;
 import static cn.gogosoft.mall.enums.ResponseEnum.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.google.gson.Gson;
 
@@ -49,11 +51,24 @@ public class CartServiceImpl implements ICartService {
 		if (product.getStock() <= 0) {
 			return ResponseVo.error(PRODUCT_STACK_ERROR);
 		}
-		// 写入redis
+		// 写入redis 用map结构
 		// key :cart_uid
-		System.err.println("12");
-		redisTemplate.opsForValue().set(String.format(CART_REDIS_KEY_TEMPLATE, uid),
-				gson.toJson(new Cart(product.getId(), quantity, cartAddForm.getSelected())));
-		return null;
+		HashOperations<String, String, String> opsForHash = redisTemplate.opsForHash();
+		// 先读取
+		String redisKey = String.format(CART_REDIS_KEY_TEMPLATE, uid);
+		String value = opsForHash.get(redisKey, String.valueOf(product.getId()));
+		Cart cart;
+		if (StringUtils.isEmpty(value)) {
+			// 没有该商品，新增
+			cart = new Cart(product.getId(), quantity, cartAddForm.getSelected());
+		} else {
+			// 有该商品，数量 +1
+			cart = gson.fromJson(value, Cart.class);
+			cart.setQuantity(cart.getQuantity() + quantity);
+		}
+		opsForHash.put(String.format(CART_REDIS_KEY_TEMPLATE, uid), String.valueOf(product.getId()),
+				gson.toJson(cart));
+
+		return ResponseVo.success();
 	}
 }
