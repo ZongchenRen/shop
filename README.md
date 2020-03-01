@@ -13,4 +13,4 @@
 - `@JsonInclude(value = Include.NON_NULL)`   当返回数据为空的时候不进行序列化
 - `@Param` 用在dao，与xml中的参数映射
 - `@RequsetParam` 用在controller,表示传参
-- `@PathVariable` restful接口
+- `@PathVariable` restful接口,/xxx/{***}

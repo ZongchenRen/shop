@@ -52,7 +52,11 @@ public enum ResponseEnum {
 	/**
 	 * 库存不足
 	 */
-	PRODUCT_STACK_ERROR(13, "库存不足"),;
+	PRODUCT_STACK_ERROR(14, "库存不足"),
+	/**
+	 * 购物车中商品不存在
+	 */
+	CART_PRODUCT_NOT_EXIST(15, "购物车中无此商品"),;
 
 	Integer code;
 	String desc;
