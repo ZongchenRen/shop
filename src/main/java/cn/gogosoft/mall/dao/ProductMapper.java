@@ -21,5 +21,8 @@ public interface ProductMapper {
 	int updateByPrimaryKey(Product record);
 
 	// CategoryIdSet 和xml中的collection对应
-	List<Product> selectByCategoryIdSet(@Param("CategoryIdSet") Set<Integer> CategoryIdSet);
+	List<Product> selectByCategoryIdSet(@Param("categoryIdSet") Set<Integer> categoryIdSet);
+
+	// CategoryIdSet 和xml中的collection对应
+	List<Product> selectByProductIdSet(@Param("productIdSet") Set<Integer> productIdSet);
 }

@@ -16,3 +16,5 @@
 - `@PathVariable` restful接口,/xxx/{***}
 
 - `useGeneratedKeys="true" keyProperty="id"`  返回当前id
+
+- 推荐使用`BigDecimal.valueOf()`

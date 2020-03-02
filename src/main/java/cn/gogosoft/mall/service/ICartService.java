@@ -1,7 +1,10 @@
 package cn.gogosoft.mall.service;
 
+import java.util.List;
+
 import cn.gogosoft.mall.form.CartAddForm;
 import cn.gogosoft.mall.form.CartUpdateForm;
+import cn.gogosoft.mall.pojo.Cart;
 import cn.gogosoft.mall.vo.CartVo;
 import cn.gogosoft.mall.vo.ResponseVo;
 
@@ -70,4 +73,6 @@ public interface ICartService {
 	 * @return
 	 */
 	ResponseVo<Integer> sum(Integer uid);
+
+	List<Cart> listForCart(Integer uid);
 }
