@@ -14,3 +14,5 @@
 - `@Param` 用在dao，与xml中的参数映射
 - `@RequsetParam` 用在controller,表示传参
 - `@PathVariable` restful接口,/xxx/{***}
+
+- `useGeneratedKeys="true" keyProperty="id"`  返回当前id
