@@ -68,7 +68,21 @@ public enum ResponseEnum {
 	/**
 	 * 购物车中商品不存在
 	 */
-	CART_SELECTED_IS_EMPTY(18, "请选择商品后下单"),;
+	CART_SELECTED_IS_EMPTY(18, "请选择商品后下单"),
+
+	/**
+	 * 订单不存在
+	 */
+	ORDER_NOT_EXIST(19, "订单不存在"),
+	/**
+	 * 订单状态有误
+	 */
+	ORDER_STATUS_ERROR(20, "订单不存在"),
+
+	/** 
+	 * 
+	*/
+	;
 
 	Integer code;
 	String desc;

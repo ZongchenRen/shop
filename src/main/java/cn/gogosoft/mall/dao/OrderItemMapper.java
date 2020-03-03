@@ -1,6 +1,7 @@
 package cn.gogosoft.mall.dao;
 
 import java.util.List;
+import java.util.Set;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -20,4 +21,7 @@ public interface OrderItemMapper {
 	int updateByPrimaryKey(OrderItem record);
 
 	int batchInsert(@Param("orderItemList") List<OrderItem> recordList);
+
+	List<OrderItem> selectByOrderNoSet(@Param("orderNoSet") Set<Long> orderNoSet);
+
 }

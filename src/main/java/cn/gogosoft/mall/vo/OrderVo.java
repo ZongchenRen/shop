@@ -35,7 +35,7 @@ public class OrderVo {
 
 	private Date createTime;
 
-	private List<OrderItemVo> itemVoList;
+	private List<OrderItemVo> orderItemVoList;
 
 	private Integer shippingId;
 

@@ -184,7 +184,7 @@
         where status=1
         <if test="categoryIdSet.size()>0">
             and category_id in
-            <foreach collection="CategoryIdSet" item="item" index="index" open="(" separator=","
+            <foreach collection="categoryIdSet" item="item" index="index" open="(" separator=","
                      close=")">
                 #{item}
             </foreach>

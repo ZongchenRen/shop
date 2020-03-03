@@ -1,6 +1,7 @@
 package cn.gogosoft.mall.dao;
 
 import java.util.List;
+import java.util.Set;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -25,4 +26,6 @@ public interface ShippingMapper {
 
 	Shipping selectByUidAndShippingId(@Param("uid") Integer uid,
 			@Param("shippingId") Integer shippingId);
+
+	List<Shipping> selectByIdSet(@Param("idSet") Set<Integer> idSet);
 }
