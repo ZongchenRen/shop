@@ -3,7 +3,7 @@
 - `@NotEmpty` 用于集合
 - `@NotBlank(message = "用户名不能为空")` 用于String 判断空格
 - `@Valid` 表单验证  必备注解 ,统一处理后，方法参数不需要`BindingResult`
-- `ResponseVo` 请求响应VO统一处理
+- `ResponseVo` 请求响应VO˚统一处理
 - `ResponseEnum` 响应状态码统一处理
 - 单元测试时class添加 `@Transactional`注解，数据只做测试，不修改数据库
 - 打包 -> `mvn clean package `
@@ -19,3 +19,5 @@
 
 - 推荐使用`BigDecimal.valueOf()`
 - Redis 有事物（打包命令），不能回滚
+
+- `docker run -d  -p 5672:5672 -p 15672:15672 rabbitmq:3.8.2-management`
