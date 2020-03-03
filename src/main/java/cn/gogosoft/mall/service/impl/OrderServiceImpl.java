@@ -181,6 +181,25 @@ public class OrderServiceImpl implements IOrderService {
 		return ResponseVo.success();
 	}
 
+	@Override
+	public void paid(Long orderNo) {
+		Order order = orderMapper.selectByOrderNo(orderNo);
+		if (order == null) {
+			throw new RuntimeException(ORDER_NOT_EXIST.getDesc() + "订单id:" + order.getOrderNo());
+		}
+		// 只有[未付款]时可以变成已付款,根据自己业务来定
+		if (!order.getStatus().equals(OrderStatusEnum.NO_PAY.getCode())) {
+			throw new RuntimeException(ORDER_NOT_EXIST.getDesc() + "订单id:" + order.getOrderNo());
+		}
+		order.setStatus(OrderStatusEnum.PAID.getCode());
+		order.setPaymentTime(new Date());
+		int row = orderMapper.updateByPrimaryKeySelective(order);
+		if (row <= 0) {
+			throw new RuntimeException("将订单更新为支付状态失败，订单id:" + order.getOrderNo());
+
+		}
+	}
+
 	private OrderVo builderOrderVo(Order order, List<OrderItem> orderItemList, Shipping shipping) {
 		OrderVo orderVo = new OrderVo();
 		BeanUtils.copyProperties(order, orderVo);

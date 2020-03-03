@@ -19,4 +19,5 @@ public interface IOrderService {
 
 	ResponseVo cancle(Integer uid, Long orderNo);
 
+	void paid(Long orderNo);
 }
