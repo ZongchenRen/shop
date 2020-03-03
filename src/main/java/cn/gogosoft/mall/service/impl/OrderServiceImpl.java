@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,7 @@ import cn.gogosoft.mall.enums.PaymentTypeEnum;
 import cn.gogosoft.mall.enums.ProductStatusEnum;
 import cn.gogosoft.mall.pojo.*;
 import cn.gogosoft.mall.service.IOrderService;
+import cn.gogosoft.mall.vo.OrderItemVo;
 import cn.gogosoft.mall.vo.OrderVo;
 import cn.gogosoft.mall.vo.ResponseVo;
 
@@ -81,6 +83,12 @@ public class OrderServiceImpl implements IOrderService {
 
 			OrderItem orderItem = builderOrderItem(uid, orderNo, cart.getQuantity(), product);
 			orderItemList.add(orderItem);
+			// 减库存
+			product.setStock(product.getStock() - cart.getQuantity());
+			int row = productMapper.updateByPrimaryKeySelective(product);
+			if (row <= 0) {
+				ResponseVo.error(ERROR);
+			}
 		}
 
 		// 计算总价格，只计算被选中的商品
@@ -94,12 +102,29 @@ public class OrderServiceImpl implements IOrderService {
 		if (rowForItem <= 0) {
 			return ResponseVo.error(ERROR);
 		}
-		// 减库存
-
 		// 更新购物车（删除选中的商品）
-
+		// Redis 有事物（打包命令），不能回滚
+		for (Cart cart : cartList) {
+			cartService.delete(uid, cart.getProductId());
+		}
 		// 构造OrderVo
-		return ResponseVo.success();
+		OrderVo orderVo = builderOrderVo(order, orderItemList, shipping);
+		return ResponseVo.success(orderVo);
+	}
+
+	private OrderVo builderOrderVo(Order order, List<OrderItem> orderItemList, Shipping shipping) {
+		OrderVo orderVo = new OrderVo();
+		BeanUtils.copyProperties(order, orderVo);
+
+		List<OrderItemVo> orderVoList = orderItemList.stream().map(e -> {
+			OrderItemVo orderItemVo = new OrderItemVo();
+			BeanUtils.copyProperties(e, orderItemVo);
+			return orderItemVo;
+		}).collect(Collectors.toList());
+		orderVo.setItemVoList(orderVoList);
+		orderVo.setShippingId(shipping.getId());
+		orderVo.setShippingVo(shipping);
+		return orderVo;
 	}
 
 	private Order builderOrder(Integer uid, Long orderNo, Integer shippingId,
